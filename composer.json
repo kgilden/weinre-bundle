@@ -22,7 +22,7 @@
         "symfony/yaml": "~2.0"
     },
     "autoload": {
-        "psr-0": { "KG\\WeinreBundle": "src/" }
+        "psr-0": { "KG\\WeinreBundle": "" }
     },
     "target-dir": "KG/WeinreBundle"
 }
