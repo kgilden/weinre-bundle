@@ -11,6 +11,8 @@
     <services>
         <service id="kg_weinre.script_injector" class="%kg_weinre.script_injector.class%">
             <tag name="kernel.event_subscriber" />
+            <argument>%kg_weinre.host%</argument>
+            <argument>%kg_weinre.port%</argument>
         </service>
     </services>
 </container>
