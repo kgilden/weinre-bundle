@@ -1,0 +1,24 @@
+{
+    "name"        : "kgilden/weinre-bundle",
+    "description" : "Symfony Weinre bundle",
+    "homepage"    : "https://github.com/kgilden/weinre-bundle",
+    "license"     : "MIT",
+    "type"        : "symfony-bundle",
+    "keywords"    : ["weinre"],
+    "authors": [
+        {
+            "name"  : "Kristen Gilden",
+            "email" : "kristen.gilden@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.8"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-0": { "KG\\WeinreBundle": "src/" }
+    },
+    "target-dir": "KG/WeinreBundle"
+}
