@@ -13,6 +13,7 @@ namespace KG\WeinreBundle\Tests\EventListener;
 
 use KG\WeinreBundle\EventListener\WeinreListener;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -58,8 +59,10 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = $this->getMockEvent();
         $this->mockGetResponse($event, $response);
-        $this->mockGetRequest($event, $this->getMockRequest());
+        $this->mockGetRequest($event, $request = new Request());
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
+
+        $request->server->set('SERVER_NAME', 'localhost');
 
         $listener = new WeinreListener();
         $listener->onKernelResponse($event);
@@ -67,8 +70,7 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $expected = <<<EOT
 <html>
 <body>
-<script src="http://192.168.1.64:8080/target/target-script-min.js"></script>
-</body>
+<script src="localhost/target/target-script-min.js"></script></body>
 </html>
 EOT;
 
@@ -76,6 +78,25 @@ EOT;
             preg_replace('/\s+/', '', $expected),
             preg_replace('/\s+/', '', $response->getContent())
         );
+    }
+
+    public function testConstructorHostAndPortOverrideGuesses()
+    {
+        $response = new Response($content = '<html><body></body></html>');
+
+        $event = $this->getMockEvent();
+        $this->mockGetResponse($event, $response);
+        $this->mockGetRequest($event, $request = new Request());
+        $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
+
+        $request->server->set('SERVER_NAME', 'localhost');
+
+        $listener = new WeinreListener('127.0.0.1', '8080');
+        $listener->onKernelResponse($event);
+
+        $expected = '<html><body><script src="127.0.0.1:8080/target/target-script-min.js"></script></body></html>';
+
+        $this->assertEquals($expected, $response->getContent());
     }
 
     public function testScriptNotAddedToXmlHttpRequests()
