@@ -4,7 +4,7 @@
     "homepage"    : "https://github.com/kgilden/weinre-bundle",
     "license"     : "MIT",
     "type"        : "symfony-bundle",
-    "keywords"    : ["weinre"],
+    "keywords"    : ["weinre", "mobile", "debugging"],
     "authors": [
         {
             "name"  : "Kristen Gilden",
