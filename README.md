@@ -58,13 +58,13 @@ public function registerBundles()
 By default the bundle expects your Weinre server to run on the same machine. For
 example, if the application runs at 198.51.100.0, the target script is expected
 to be at "http://198.51.100.0:8080/target/target-script-min.js". You can
-override this by configuring the bundle:
+override this by configuring the bundle (each value is optional):
 
 ```yml
 kg_weinre:
     scheme: https        # defaults to 'http'
     host:   203.0.113.0  # defaults to server address
-    port:   8000         # '8080'
+    port:   8000         # defaults to '8080'
     path:   /foo.js      # defaults to '/target/target-script-min.js'
 ```
 
