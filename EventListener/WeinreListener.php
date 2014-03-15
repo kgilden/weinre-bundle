@@ -31,21 +31,14 @@ class WeinreListener implements EventSubscriberInterface
     /**
      * @var string
      */
-    private $host;
+    private $targetScriptUrl;
 
     /**
-     * @var string
+     * @param string $targetScriptUrl
      */
-    private $port;
-
-    /**
-     * @param string $host
-     * @param string $port
-     */
-    public function __construct($host = null, $port = null)
+    public function __construct($targetScriptUrl = null)
     {
-        $this->host = $host;
-        $this->port = $port;
+        $this->targetScriptUrl = $targetScriptUrl;
     }
 
     /**
@@ -73,16 +66,16 @@ class WeinreListener implements EventSubscriberInterface
             return;
         }
 
-        $this->injectScript($event->getResponse(), $this->guessSchemeAndHost($request));
+        $this->injectScript($event->getResponse(), $this->getTargetScriptUrl($request));
     }
 
     /**
      * Injects the script tag at the end of response content body.
      *
      * @param Response $response
-     * @param string   $schemeAndHost
+     * @param string   $targetScriptUrl
      */
-    private function injectScript(Response $response, $schemeAndHost)
+    private function injectScript(Response $response, $targetScriptUrl)
     {
         $posrFunction = function_exists('mb_strripos') ? 'mb_strripos' : 'strripos';
         $substrFunction = function_exists('mb_substr') ? 'mb_substr' : 'substr';
@@ -91,9 +84,7 @@ class WeinreListener implements EventSubscriberInterface
         $pos = $posrFunction($content, '</body>');
 
         if (false !== $pos) {
-            $script = <<<EOT
-<script src="$schemeAndHost/target/target-script-min.js"></script>
-EOT;
+            $script = "<script src=\"$targetScriptUrl\"></script>";
 
             $content = $substrFunction($content, 0, $pos).$script.$substrFunction($content, $pos);
             $response->setContent($content);
@@ -101,23 +92,19 @@ EOT;
     }
 
     /**
-     * Guesses the weinre server scheme and host. It either uses the passed
-     * host & port values or expects the weinre server to be on the same
-     * machine with the port 8080.
+     * Either returns the preset target script url or attempts to guess it based
+     * on the current server address.
      *
      * @param Request $request
      *
-     * @return [type]
+     * @return string
      */
-    private function guessSchemeAndHost(Request $request)
+    private function getTargetScriptUrl(Request $request)
     {
-        $schemeAndHost = $this->host ?: $request->server->get('SERVER_ADDR');
-        $port = $this->port ?: '8080';
-
-        if ($this->port) {
-            $schemeAndHost .= ':'.$this->port;
+        if ($this->targetScriptUrl) {
+            return $this->targetScriptUrl;
         }
 
-        return $schemeAndHost;
+        return sprintf('http://%s:8080/target/target-script-min.js', $request->server->get('SERVER_ADDR'));
     }
 }

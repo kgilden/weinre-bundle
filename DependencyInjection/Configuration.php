@@ -30,8 +30,7 @@ class Configuration implements ConfigurationInterface
 
         $root
             ->children()
-                ->scalarNode('host')->defaultValue(null)->end()
-                ->scalarNode('port')->defaultValue('8080')->end()
+                ->scalarNode('target_script_url')->defaultValue(null)->end()
             ->end()
         ;
 

@@ -34,28 +34,14 @@ class KGWeinreExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(null, 'kg_weinre.host');
+        $this->assertParameter(null, 'kg_weinre.target_script_url');
     }
 
-    public function testEmptyConfigLoadSetsPort()
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertParameter('8080', 'kg_weinre.port');
-    }
-
-    public function testFullConfigSetsHost()
+    public function testFullConfigSetsTargetScriptUrl()
     {
         $this->createFullConfiguration();
 
-        $this->assertParameter('http://example.com', 'kg_weinre.host');
-    }
-
-    public function testFullConfigSetsPort()
-    {
-        $this->createFullConfiguration();
-
-        $this->assertParameter('8081', 'kg_weinre.port');
+        $this->assertParameter('http://example.com/script.js', 'kg_weinre.target_script_url');
     }
 
     protected function tearDown()
@@ -89,8 +75,7 @@ class KGWeinreExtensionTest extends \PHPUnit_Framework_TestCase
     private function getFullConfig()
     {
         $yaml = <<<EOF
-host: http://example.com
-port: 8081
+target_script_url: http://example.com/script.js
 EOF;
 
         $parser = new Parser();
