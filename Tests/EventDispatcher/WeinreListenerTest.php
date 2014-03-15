@@ -62,12 +62,12 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $this->mockGetRequest($event, $request = new Request());
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
 
-        $request->server->set('SERVER_NAME', 'localhost');
+        $request->server->set('SERVER_ADDR', '127.0.0.1');
 
         $listener = new WeinreListener();
         $listener->onKernelResponse($event);
 
-        $expected = "<script src=\"localhost/target/target-script-min.js\"></script></body>";
+        $expected = "<script src=\"127.0.0.1/target/target-script-min.js\"></script></body>";
 
         $this->assertEquals($expected, $response->getContent());
     }
@@ -81,7 +81,7 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $this->mockGetRequest($event, $request = new Request());
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
 
-        $request->server->set('SERVER_NAME', 'localhost');
+        $request->server->set('SERVER_ADDR', '192.168.1.64');
 
         $listener = new WeinreListener('127.0.0.1', '8080');
         $listener->onKernelResponse($event);

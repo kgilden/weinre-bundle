@@ -111,7 +111,7 @@ EOT;
      */
     private function guessSchemeAndHost(Request $request)
     {
-        $schemeAndHost = $this->host ?: $request->server->get('SERVER_NAME');
+        $schemeAndHost = $this->host ?: $request->server->get('SERVER_ADDR');
         $port = $this->port ?: '8080';
 
         if ($this->port) {
