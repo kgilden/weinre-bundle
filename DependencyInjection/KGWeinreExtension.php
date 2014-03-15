@@ -32,6 +32,8 @@ class KGWeinreExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $container->setParameter('kg_weinre.target_script_url', $config['target_script_url']);
+        foreach ($config as $key => $value) {
+            $container->setParameter('kg_weinre.'.$key, $value);
+        }
     }
 }

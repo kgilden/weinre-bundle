@@ -23,7 +23,7 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSubscribingMethodsActuallyExist()
     {
-        $listener = new WeinreListener();
+        $listener = new WeinreListener('http', 'example.com', '8080', 'foo.js');
 
         $methods = WeinreListener::getSubscribedEvents();
 
@@ -47,7 +47,7 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $this->mockGetRequest($event, $this->getMockRequest());
         $this->mockGetRequestType($event, HttpKernelInterface::SUB_REQUEST);
 
-        $listener = new WeinreListener();
+        $listener = new WeinreListener('http', 'example.com', '8080', 'foo.js');
         $listener->onKernelResponse($event);
 
         $this->assertEquals($content, $response->getContent());
@@ -59,15 +59,13 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = $this->getMockEvent();
         $this->mockGetResponse($event, $response);
-        $this->mockGetRequest($event, $request = new Request());
+        $this->mockGetRequest($event, $this->getMockRequest());
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
 
-        $request->server->set('SERVER_ADDR', '127.0.0.1');
-
-        $listener = new WeinreListener();
+        $listener = new WeinreListener('http', 'example.com', '8080', 'foo.js');
         $listener->onKernelResponse($event);
 
-        $expected = "<script src=\"http://127.0.0.1:8080/target/target-script-min.js\"></script></body>";
+        $expected = "<script src=\"http://example.com:8080/foo.js\"></script></body>";
 
         $this->assertEquals($expected, $response->getContent());
     }
@@ -88,25 +86,27 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $this->mockGetRequest($event, $request);
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new WeinreListener();
+        $listener = new WeinreListener('http', 'example.com', '8080', 'foo.js');
         $listener->onKernelResponse($event);
 
         $this->assertEquals($content, $response->getContent());
     }
 
-    public function testPresetUrl()
+    public function testHostGuessedFromRequest()
     {
         $response = new Response('</body>');
 
         $event = $this->getMockEvent();
         $this->mockGetResponse($event, $response);
-        $this->mockGetRequest($event, $this->getMockRequest());
+        $this->mockGetRequest($event, $request = new Request());
         $this->mockGetRequestType($event, HttpKernelInterface::MASTER_REQUEST);
 
-        $listener = new WeinreListener('http://198.51.100.0:8081/foo.js');
+        $request->server->set('SERVER_ADDR', '198.51.100.0');
+
+        $listener = new WeinreListener('http', null, '8080', 'foo.js');
         $listener->onKernelResponse($event);
 
-        $expected = "<script src=\"http://198.51.100.0:8081/foo.js\"></script></body>";
+        $expected = "<script src=\"http://198.51.100.0:8080/foo.js\"></script></body>";
 
         $this->assertEquals($expected, $response->getContent());
     }

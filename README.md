@@ -62,7 +62,10 @@ override this by configuring the bundle:
 
 ```yml
 kg_weinre:
-    target_script_url: 'http://203.0.113.0:8000/target/target-script-min.js'
+    scheme: https        # defaults to 'http'
+    host:   203.0.113.0  # defaults to server address
+    port:   8000         # '8080'
+    path:   /foo.js      # defaults to '/target/target-script-min.js'
 ```
 
 ## Requirements

@@ -30,7 +30,10 @@ class Configuration implements ConfigurationInterface
 
         $root
             ->children()
-                ->scalarNode('target_script_url')->defaultValue(null)->end()
+                ->scalarNode('scheme')->defaultValue('http')->end()
+                ->scalarNode('host')->defaultNull()->end()
+                ->scalarNode('port')->defaultValue('8080')->end()
+                ->scalarNode('path')->defaultValue('/target/target-script-min.js')->end()
             ->end()
         ;
 

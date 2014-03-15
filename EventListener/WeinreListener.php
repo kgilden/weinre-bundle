@@ -31,14 +31,35 @@ class WeinreListener implements EventSubscriberInterface
     /**
      * @var string
      */
-    private $targetScriptUrl;
+    private $scheme;
 
     /**
-     * @param string $targetScriptUrl
+     * @var string|null
      */
-    public function __construct($targetScriptUrl = null)
+    private $host;
+
+    /**
+     * @var string
+     */
+    private $port;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @param string      $scheme
+     * @param string|null $host
+     * @param string      $port
+     * @param string      $path
+     */
+    public function __construct($scheme, $host = null, $port, $path)
     {
-        $this->targetScriptUrl = $targetScriptUrl;
+        $this->scheme = $scheme;
+        $this->host = $host;
+        $this->port = $port;
+        $this->path = $path;
     }
 
     /**
@@ -92,8 +113,7 @@ class WeinreListener implements EventSubscriberInterface
     }
 
     /**
-     * Either returns the preset target script url or attempts to guess it based
-     * on the current server address.
+     * Returns the target script url. Uses the server ip, if the host is unset.
      *
      * @param Request $request
      *
@@ -101,10 +121,12 @@ class WeinreListener implements EventSubscriberInterface
      */
     private function getTargetScriptUrl(Request $request)
     {
-        if ($this->targetScriptUrl) {
-            return $this->targetScriptUrl;
-        }
-
-        return sprintf('http://%s:8080/target/target-script-min.js', $request->server->get('SERVER_ADDR'));
+        return sprintf(
+            '%s://%s:%s/%s',
+            $this->scheme,
+            $this->host ?: $request->server->get('SERVER_ADDR'),
+            $this->port,
+            ltrim($this->path, '/')
+        );
     }
 }

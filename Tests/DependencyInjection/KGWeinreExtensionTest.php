@@ -30,18 +30,24 @@ class KGWeinreExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertDefinitionHasTag('kg_weinre.script_injector', 'kernel.event_subscriber');
     }
 
-    public function testEmptyConfigLoadSetsHost()
+    public function testEmptyConfigSetsParameters()
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(null, 'kg_weinre.target_script_url');
+        $this->assertParameter('http', 'kg_weinre.scheme');
+        $this->assertParameter(null, 'kg_weinre.host');
+        $this->assertParameter('8080', 'kg_weinre.port');
+        $this->assertParameter('/target/target-script-min.js', 'kg_weinre.path');
     }
 
-    public function testFullConfigSetsTargetScriptUrl()
+    public function testFullConfigSetsParameters()
     {
         $this->createFullConfiguration();
 
-        $this->assertParameter('http://example.com/script.js', 'kg_weinre.target_script_url');
+        $this->assertParameter('https', 'kg_weinre.scheme');
+        $this->assertParameter('example.com', 'kg_weinre.host');
+        $this->assertParameter('8000', 'kg_weinre.port');
+        $this->assertParameter('/target/script.js', 'kg_weinre.path');
     }
 
     protected function tearDown()
@@ -75,7 +81,10 @@ class KGWeinreExtensionTest extends \PHPUnit_Framework_TestCase
     private function getFullConfig()
     {
         $yaml = <<<EOF
-target_script_url: http://example.com/script.js
+scheme: https
+host: example.com
+port: 8000
+path: /target/script.js
 EOF;
 
         $parser = new Parser();
