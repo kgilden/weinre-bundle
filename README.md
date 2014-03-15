@@ -1,6 +1,8 @@
 KGWeinreBundle
 ==============
 
+[![Build Status](https://travis-ci.org/kgilden/weinre-bundle.png)](https://travis-ci.org/kgilden/weinre-bundle)
+
 `KGWeinreBundle` integrates [Weinre](http://people.apache.org/~pmuellr/weinre/)
 with your Symfony2 application to enable mobile debugging.
 
