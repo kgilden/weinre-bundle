@@ -53,6 +53,18 @@ public function registerBundles()
 ?>
 ```
 
+## Configuration
+
+By default the bundle expects your Weinre server to run on the same machine. For
+example, if the application runs at 198.51.100.0, the target script is expected
+to be at "http://198.51.100.0:8080/target/target-script-min.js". You can
+override this by configuring the bundle:
+
+```yml
+kg_weinre:
+    target_script_url: 'http://203.0.113.0:8000/target/target-script-min.js'
+```
+
 ## Requirements
 
 * PHP >= 5.3.8
