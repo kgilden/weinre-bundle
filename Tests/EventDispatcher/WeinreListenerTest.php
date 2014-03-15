@@ -55,7 +55,7 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testScriptAddedToMasterRequest()
     {
-        $response = new Response($content = "<html><body></body></html>");
+        $response = new Response($content = "</body>");
 
         $event = $this->getMockEvent();
         $this->mockGetResponse($event, $response);
@@ -67,22 +67,14 @@ class WeinreListenerTest extends \PHPUnit_Framework_TestCase
         $listener = new WeinreListener();
         $listener->onKernelResponse($event);
 
-        $expected = <<<EOT
-<html>
-<body>
-<script src="localhost/target/target-script-min.js"></script></body>
-</html>
-EOT;
+        $expected = "<script src=\"localhost/target/target-script-min.js\"></script></body>";
 
-        $this->assertEquals(
-            preg_replace('/\s+/', '', $expected),
-            preg_replace('/\s+/', '', $response->getContent())
-        );
+        $this->assertEquals($expected, $response->getContent());
     }
 
     public function testConstructorHostAndPortOverrideGuesses()
     {
-        $response = new Response($content = '<html><body></body></html>');
+        $response = new Response($content = '</body>');
 
         $event = $this->getMockEvent();
         $this->mockGetResponse($event, $response);
@@ -94,7 +86,7 @@ EOT;
         $listener = new WeinreListener('127.0.0.1', '8080');
         $listener->onKernelResponse($event);
 
-        $expected = '<html><body><script src="127.0.0.1:8080/target/target-script-min.js"></script></body></html>';
+        $expected = '<script src="127.0.0.1:8080/target/target-script-min.js"></script></body>';
 
         $this->assertEquals($expected, $response->getContent());
     }
