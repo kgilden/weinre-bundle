@@ -15,7 +15,7 @@ on how to do that.
 Add `KGWeinerBundle` to your app with Composer:
 
 ```bash
-$ php composer.phar require kgilden/weinre-bundle:dev-master
+$ php composer.phar require kgilden/weinre-bundle:~1.0
 ```
 
 Or add it manually to `composer.json`
@@ -23,7 +23,7 @@ Or add it manually to `composer.json`
 ```json
 {
     "require": {
-        "kgilden/weinre-bundle": "dev-master"
+        "kgilden/weinre-bundle": "~1.0"
     }
 }
 ```
@@ -87,6 +87,11 @@ You can run unit tests by simply executing
 ```
 phpunit
 ```
+
+## Credits
+
+Thanks to [Inoryy](https://github.com/Inoryy) for the
+[project skeleton](https://github.com/Inoryy/php-project-skeleton).
 
 ....
 
